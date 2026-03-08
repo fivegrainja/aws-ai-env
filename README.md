@@ -4,7 +4,7 @@ Sandbox environment for experimenting with AI infrastructure on AWS. A single EC
 
 ## Key Features
 
-- **Cost controls** — LiteLLM enforces a configurable budget cap ($10/30 days default) across all model usage
+- **Cost controls** — LiteLLM enforces a configurable budget cap ($75/30 days default) across all model usage
 - **Multi-model access** — Claude, Nova, and other Bedrock models through a single proxy
 - **Zero-trust networking** — No inbound security group rules; all access via Tailscale
 

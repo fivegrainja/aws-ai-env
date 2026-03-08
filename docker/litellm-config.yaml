@@ -13,7 +13,7 @@ model_list:
       model: bedrock/us.amazon.nova-pro-v1:0
 
 general_settings:
-  max_budget: 10
+  max_budget: 75
   budget_duration: 30d
 
 litellm_settings:
