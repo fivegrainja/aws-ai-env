@@ -35,7 +35,8 @@ services:
   openclaw-gateway:
     image: ghcr.io/openclaw/openclaw:latest
     container_name: openclaw-gateway
-    # No host port — Tailscale Serve handles ingress via HTTPS
+    ports:
+      - "127.0.0.1:18789:18789"
     volumes:
       - openclaw-data:/home/node/.openclaw
     command: ["node", "openclaw.mjs", "gateway", "--allow-unconfigured"]
