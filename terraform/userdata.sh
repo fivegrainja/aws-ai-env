@@ -15,7 +15,7 @@ systemctl start docker
 # Install Docker Compose plugin
 mkdir -p /usr/local/lib/docker/cli-plugins
 ARCH=$(uname -m)
-curl -SL "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-${ARCH}" \
+curl -SL "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-$${ARCH}" \
   -o /usr/local/lib/docker/cli-plugins/docker-compose
 chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 
@@ -30,8 +30,18 @@ tailscale up --auth-key="${tailscale_auth_key}" --hostname="${tailscale_hostname
 git clone "${github_repo_url}" /opt/ai-env
 chown -R ec2-user:ec2-user /opt/ai-env
 
-# Set AWS region for LiteLLM
-echo "AWS_DEFAULT_REGION=${aws_region}" > /opt/ai-env/docker/.env
+# Set AWS region and fetch LiteLLM master key from SSM
+LITELLM_MASTER_KEY=$(aws ssm get-parameter --region ${aws_region} --name /ai-env/litellm-master-key --with-decryption --query Parameter.Value --output text)
+cat <<EOF > /opt/ai-env/docker/.env
+AWS_DEFAULT_REGION=${aws_region}
+LITELLM_MASTER_KEY=$${LITELLM_MASTER_KEY}
+EOF
+
+# Pre-create volumes with correct ownership so containers don't get root-owned dirs
+# OpenClaw runs as node (UID 1000)
+docker volume create docker_openclaw-data
+mkdir -p /var/lib/docker/volumes/docker_openclaw-data/_data
+chown -R 1000:1000 /var/lib/docker/volumes/docker_openclaw-data/_data
 
 # Start services
 cd /opt/ai-env/docker

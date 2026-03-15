@@ -13,6 +13,7 @@ model_list:
       model: bedrock/us.amazon.nova-pro-v1:0
 
 general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
   max_budget: 75
   budget_duration: 30d
 
