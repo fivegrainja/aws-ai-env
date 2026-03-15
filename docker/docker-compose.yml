@@ -39,8 +39,7 @@ services:
       - "18789:18789"
     volumes:
       - openclaw-data:/home/node/.openclaw
-    environment:
-      - OPENCLAW_GATEWAY_BIND=lan
+    command: ["node", "openclaw.mjs", "gateway", "--allow-unconfigured", "--bind", "lan"]
     restart: unless-stopped
 
   open-webui:
