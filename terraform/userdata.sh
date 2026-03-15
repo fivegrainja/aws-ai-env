@@ -51,6 +51,9 @@ LITELLM_MASTER_KEY=$${LITELLM_MASTER_KEY} envsubst '$LITELLM_MASTER_KEY' \
   > /var/lib/docker/volumes/docker_openclaw-data/_data/openclaw.json
 chown 1000:1000 /var/lib/docker/volumes/docker_openclaw-data/_data/openclaw.json
 
+# Configure Tailscale Serve: HTTPS → OpenClaw on loopback
+tailscale serve --bg --yes 18789
+
 # Start services
 cd /opt/ai-env/docker
 docker compose up -d
