@@ -39,7 +39,6 @@ services:
       - "18789:18789"
     volumes:
       - openclaw-data:/home/node/.openclaw
-      - ./openclaw.json:/home/node/.openclaw/openclaw.json:ro
     command: ["node", "openclaw.mjs", "gateway", "--allow-unconfigured", "--bind", "lan"]
     restart: unless-stopped
 

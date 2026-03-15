@@ -39,16 +39,17 @@ LITELLM_MASTER_KEY=$${LITELLM_MASTER_KEY}
 POSTGRES_PASSWORD=$${POSTGRES_PASSWORD}
 EOF
 
-# Render OpenClaw config template with secrets
-LITELLM_MASTER_KEY=$${LITELLM_MASTER_KEY} envsubst '$LITELLM_MASTER_KEY' \
-  < /opt/ai-env/docker/openclaw.json.template \
-  > /opt/ai-env/docker/openclaw.json
-
 # Pre-create volumes with correct ownership so containers don't get root-owned dirs
 # OpenClaw runs as node (UID 1000)
 docker volume create docker_openclaw-data
 mkdir -p /var/lib/docker/volumes/docker_openclaw-data/_data
 chown -R 1000:1000 /var/lib/docker/volumes/docker_openclaw-data/_data
+
+# Render OpenClaw config template and copy into volume
+LITELLM_MASTER_KEY=$${LITELLM_MASTER_KEY} envsubst '$LITELLM_MASTER_KEY' \
+  < /opt/ai-env/docker/openclaw.json.template \
+  > /var/lib/docker/volumes/docker_openclaw-data/_data/openclaw.json
+chown 1000:1000 /var/lib/docker/volumes/docker_openclaw-data/_data/openclaw.json
 
 # Start services
 cd /opt/ai-env/docker
