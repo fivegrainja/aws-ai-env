@@ -6,9 +6,11 @@ services:
       - "4000:4000"
     volumes:
       - ./litellm-config.yaml:/app/config.yaml
+      - litellm-data:/app/data
     environment:
       - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-east-1}
       - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
+      - DATABASE_URL=sqlite:////app/data/litellm.db
     command: ["--config", "/app/config.yaml", "--port", "4000"]
     restart: unless-stopped
 
@@ -38,3 +40,4 @@ services:
 volumes:
   openclaw-data:
   open-webui-data:
+  litellm-data:
