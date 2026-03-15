@@ -5,17 +5,6 @@
       "model": { "primary": "litellm/claude-sonnet" }
     }
   },
-  "commands": {
-    "native": "auto",
-    "nativeSkills": "auto",
-    "restart": true,
-    "ownerDisplay": "raw"
-  },
-  "gateway": {
-    "controlUi": {
-      "dangerouslyAllowHostHeaderOriginFallback": true
-    }
-  },
   "models": {
     "mode": "replace",
     "providers": {

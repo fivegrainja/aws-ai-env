@@ -33,10 +33,12 @@ chown -R ec2-user:ec2-user /opt/ai-env
 # Fetch secrets from SSM and write .env
 LITELLM_MASTER_KEY=$(aws ssm get-parameter --region ${aws_region} --name /ai-env/litellm-master-key --with-decryption --query Parameter.Value --output text)
 POSTGRES_PASSWORD=$(aws ssm get-parameter --region ${aws_region} --name /ai-env/postgres-password --with-decryption --query Parameter.Value --output text)
+OPENCLAW_GATEWAY_TOKEN=$(aws ssm get-parameter --region ${aws_region} --name /ai-env/openclaw-gateway-token --with-decryption --query Parameter.Value --output text)
 cat <<EOF > /opt/ai-env/docker/.env
 AWS_DEFAULT_REGION=${aws_region}
 LITELLM_MASTER_KEY=$${LITELLM_MASTER_KEY}
 POSTGRES_PASSWORD=$${POSTGRES_PASSWORD}
+OPENCLAW_GATEWAY_TOKEN=$${OPENCLAW_GATEWAY_TOKEN}
 EOF
 
 # Pre-create volumes with correct ownership so containers don't get root-owned dirs
@@ -50,9 +52,6 @@ LITELLM_MASTER_KEY=$${LITELLM_MASTER_KEY} envsubst '$LITELLM_MASTER_KEY' \
   < /opt/ai-env/docker/openclaw.json.template \
   > /var/lib/docker/volumes/docker_openclaw-data/_data/openclaw.json
 chown 1000:1000 /var/lib/docker/volumes/docker_openclaw-data/_data/openclaw.json
-
-# Configure Tailscale Serve: HTTPS → OpenClaw on loopback
-tailscale serve --bg --yes 18789
 
 # Start services
 cd /opt/ai-env/docker

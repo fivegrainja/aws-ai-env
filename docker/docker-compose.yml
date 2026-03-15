@@ -35,10 +35,16 @@ services:
   openclaw-gateway:
     image: ghcr.io/openclaw/openclaw:latest
     container_name: openclaw-gateway
-    network_mode: host
+    ports:
+      - "18789:18789"
+      - "18790:18790"
     volumes:
       - openclaw-data:/home/node/.openclaw
-    command: ["node", "openclaw.mjs", "gateway", "--allow-unconfigured"]
+    environment:
+      - OPENCLAW_GATEWAY_TOKEN=${OPENCLAW_GATEWAY_TOKEN}
+      - OPENCLAW_ALLOW_INSECURE_PRIVATE_WS=1
+    command: ["node", "openclaw.mjs", "gateway", "--allow-unconfigured", "--bind", "lan"]
+    init: true
     restart: unless-stopped
 
   open-webui:
