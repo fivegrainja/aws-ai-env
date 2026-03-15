@@ -1,0 +1,4 @@
+https://ai-env.tail4415ea.ts.net:18789 {
+	reverse_proxy openclaw-gateway:18789
+	tls /certs/ai-env.crt /certs/ai-env.key
+}
