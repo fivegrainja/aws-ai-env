@@ -39,6 +39,7 @@ services:
     volumes:
       - openclaw-data:/home/node/.openclaw
       - /var/run/tailscale/tailscaled.sock:/var/run/tailscale/tailscaled.sock
+      - /usr/bin/tailscale:/usr/bin/tailscale:ro
     command: ["node", "openclaw.mjs", "gateway", "--allow-unconfigured", "--tailscale", "serve"]
     restart: unless-stopped
 
