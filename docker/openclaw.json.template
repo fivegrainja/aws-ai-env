@@ -11,6 +11,12 @@
     "restart": true,
     "ownerDisplay": "raw"
   },
+  "gateway": {
+    "bind": "lan",
+    "controlUi": {
+      "dangerouslyAllowHostHeaderOriginFallback": true
+    }
+  },
   "models": {
     "mode": "replace",
     "providers": {
