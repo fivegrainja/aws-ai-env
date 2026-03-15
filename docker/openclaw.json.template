@@ -12,7 +12,6 @@
     "ownerDisplay": "raw"
   },
   "gateway": {
-    "bind": "lan",
     "controlUi": {
       "dangerouslyAllowHostHeaderOriginFallback": true
     }

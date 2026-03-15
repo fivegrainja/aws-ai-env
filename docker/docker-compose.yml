@@ -39,7 +39,7 @@ services:
     volumes:
       - openclaw-data:/home/node/.openclaw
       - /var/run/tailscale/tailscaled.sock:/var/run/tailscale/tailscaled.sock
-    command: ["node", "openclaw.mjs", "gateway", "--allow-unconfigured", "--bind", "lan", "--tailscale", "serve"]
+    command: ["node", "openclaw.mjs", "gateway", "--allow-unconfigured", "--tailscale", "serve"]
     restart: unless-stopped
 
   open-webui:
