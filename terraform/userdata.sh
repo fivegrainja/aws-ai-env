@@ -30,11 +30,13 @@ tailscale up --auth-key="${tailscale_auth_key}" --hostname="${tailscale_hostname
 git clone "${github_repo_url}" /opt/ai-env
 chown -R ec2-user:ec2-user /opt/ai-env
 
-# Set AWS region and fetch LiteLLM master key from SSM
+# Fetch secrets from SSM and write .env
 LITELLM_MASTER_KEY=$(aws ssm get-parameter --region ${aws_region} --name /ai-env/litellm-master-key --with-decryption --query Parameter.Value --output text)
+POSTGRES_PASSWORD=$(aws ssm get-parameter --region ${aws_region} --name /ai-env/postgres-password --with-decryption --query Parameter.Value --output text)
 cat <<EOF > /opt/ai-env/docker/.env
 AWS_DEFAULT_REGION=${aws_region}
 LITELLM_MASTER_KEY=$${LITELLM_MASTER_KEY}
+POSTGRES_PASSWORD=$${POSTGRES_PASSWORD}
 EOF
 
 # Pre-create volumes with correct ownership so containers don't get root-owned dirs

@@ -1,4 +1,20 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    environment:
+      - POSTGRES_DB=litellm
+      - POSTGRES_USER=litellm
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U litellm"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   litellm:
     image: ghcr.io/berriai/litellm:main-latest
     container_name: litellm
@@ -6,13 +22,15 @@ services:
       - "4000:4000"
     volumes:
       - ./litellm-config.yaml:/app/config.yaml
-      - litellm-data:/app/data
     environment:
       - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-east-1}
       - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
-      - DATABASE_URL=sqlite:////app/data/litellm.db
+      - DATABASE_URL=postgresql://litellm:${POSTGRES_PASSWORD}@postgres:5432/litellm
     command: ["--config", "/app/config.yaml", "--port", "4000"]
     restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
 
   openclaw-gateway:
     image: ghcr.io/openclaw/openclaw:latest
@@ -40,4 +58,4 @@ services:
 volumes:
   openclaw-data:
   open-webui-data:
-  litellm-data:
+  postgres-data:
