@@ -32,25 +32,14 @@ services:
       postgres:
         condition: service_healthy
 
-  caddy:
-    image: caddy:alpine
-    container_name: caddy
-    ports:
-      - "18789:18789"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - /etc/tailscale/certs:/certs:ro
-    restart: unless-stopped
-    depends_on:
-      - openclaw-gateway
-
   openclaw-gateway:
     image: ghcr.io/openclaw/openclaw:latest
     container_name: openclaw-gateway
-    # No host port — Caddy proxies to this service internally
+    # No host port — Tailscale Serve handles ingress via HTTPS
     volumes:
       - openclaw-data:/home/node/.openclaw
-    command: ["node", "openclaw.mjs", "gateway", "--allow-unconfigured", "--bind", "lan"]
+      - /var/run/tailscale/tailscaled.sock:/var/run/tailscale/tailscaled.sock
+    command: ["node", "openclaw.mjs", "gateway", "--allow-unconfigured", "--bind", "lan", "--tailscale", "serve"]
     restart: unless-stopped
 
   open-webui:

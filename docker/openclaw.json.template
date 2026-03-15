@@ -14,7 +14,7 @@
   "gateway": {
     "bind": "lan",
     "controlUi": {
-      "allowedOrigins": ["https://ai-env.tail4415ea.ts.net:18789"]
+      "dangerouslyAllowHostHeaderOriginFallback": true
     }
   },
   "models": {
