@@ -53,6 +53,14 @@ LITELLM_MASTER_KEY=$${LITELLM_MASTER_KEY} envsubst '$LITELLM_MASTER_KEY' \
   > /var/lib/docker/volumes/docker_openclaw-data/_data/openclaw.json
 chown 1000:1000 /var/lib/docker/volumes/docker_openclaw-data/_data/openclaw.json
 
+# Generate Tailscale TLS cert for Caddy (OpenClaw HTTPS proxy)
+mkdir -p /etc/tailscale/certs
+tailscale cert \
+  --cert-file /etc/tailscale/certs/ai-env.crt \
+  --key-file  /etc/tailscale/certs/ai-env.key \
+  "${tailscale_hostname}.$(tailscale status --json | python3 -c 'import sys,json; print(json.load(sys.stdin)["MagicDNSSuffix"])')"
+chmod 644 /etc/tailscale/certs/ai-env.crt /etc/tailscale/certs/ai-env.key
+
 # Start services
 cd /opt/ai-env/docker
 docker compose up -d
