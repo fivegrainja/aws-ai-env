@@ -1,4 +1,9 @@
 {
+  "gateway": {
+    "controlUi": {
+      "dangerouslyAllowHostHeaderOriginFallback": true
+    }
+  },
   "agents": {
     "defaults": {
       "compaction": { "mode": "safeguard" },
