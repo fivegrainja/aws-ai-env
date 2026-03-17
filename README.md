@@ -11,8 +11,8 @@ Sandbox environment for experimenting with AI infrastructure on AWS. A single EC
 ## Architecture Components
 
 - **[LiteLLM](https://docs.litellm.ai/)** — OpenAI-compatible proxy that routes requests to 100+ LLM providers. Handles model routing, budget limits, and usage tracking. All services call Bedrock through LiteLLM rather than directly.
-- **[OpenClaw](https://docs.openclaw.ai/)** — AI agent gateway that provides a unified interface for interacting with LLMs. Supports tool use, plugins (Slack, Discord, Telegram), and multi-turn conversations.
 - **[Open WebUI](https://docs.openwebui.com/)** — Web-based chat interface for interacting with models via LiteLLM.
+- **[OpenClaw](https://docs.openclaw.ai/)** — AI agent gateway (runs externally on a Mac Mini, connects to LiteLLM over Tailscale).
 
 ## Infrastructure
 
@@ -25,4 +25,4 @@ Sandbox environment for experimenting with AI infrastructure on AWS. A single EC
 
 1. Create `terraform/terraform.tfvars` with `tailscale_auth_key` and `github_repo_url`
 2. `cd terraform && terraform init && terraform plan && terraform apply`
-3. Access services via Tailscale: `http://ai-env:3000` (WebUI), `http://ai-env:4000` (LiteLLM), `http://ai-env:18789` (OpenClaw)
+3. Access services via Tailscale: `http://ai-env:3000` (WebUI), `http://ai-env:4000` (LiteLLM)

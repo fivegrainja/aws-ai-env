@@ -9,7 +9,7 @@ AWS environment for AI experimentation. Terraform provisions a single EC2 t4g.me
 ## Architecture
 
 - **Networking**: Public subnet with NO inbound security group rules. Public IP for outbound internet only. All access via Tailscale.
-- **Services**: OpenClaw (AI agent) → LiteLLM (proxy) → Bedrock. Open WebUI as frontend.
+- **Services**: LiteLLM (proxy) → Bedrock. Open WebUI as frontend. OpenClaw runs on a separate Mac Mini via Tailscale.
 - **IaC split**: Terraform manages AWS infrastructure. Docker Compose managed separately on the instance, cloned from GitHub by userdata at first boot to /opt/ai-env.
 
 ## Constraints
